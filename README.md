@@ -1,5 +1,5 @@
 <h1 align="center">
- :rocket: About project
+ :rocket: Sobre o project
 </h1>
 
 Na semana do meio ambiente, vou criar um aplicativo para cadastro e gerenciamento de locais de coleta de resíduos. 
