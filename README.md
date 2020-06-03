@@ -11,3 +11,26 @@ Trabalharemos com as ferramentas HTML, CSS, React.js, Node.js e React Native.
 </h3>
 <img src="https://github.com/rafaeleduardoteixeira/ecoleta/blob/master/prev/prev-main.png"/>
 <br/>
+
+
+💹 Backend
+
+Need acess backend directory:
+
+    Using Node.js with express.
+    Database MongoDB
+
+    Install MongoDB
+    run npm install. 
+    run npm start or nodemon start (cauntion with the conflicts of ports)
+
+⚛️  Frontend
+
+Need acess backend directory:
+
+    run npm install. 
+    
+   
+📱 Mobile
+
+    run npm install. 
