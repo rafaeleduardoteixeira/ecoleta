@@ -36,3 +36,5 @@ Need acess backend directory (MySQL):
 
     run npm install. 
     npm start.
+    <img src="https://github.com/rafaeleduardoteixeira/ecoleta/blob/master/prev/RPReplay_Final1591477347.MP4"/>
+    
