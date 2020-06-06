@@ -26,11 +26,13 @@ Need acess backend directory:
 
 ⚛️  Frontend
 
-Need acess backend directory:
+Need acess backend directory (MySQL):
 
     run npm install. 
+    npm run dev. 
     
    
 📱 Mobile
 
     run npm install. 
+    npm start.
