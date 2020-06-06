@@ -6,6 +6,9 @@ Na semana do meio ambiente, vou criar um aplicativo para cadastro e gerenciament
 
 Trabalharemos com as ferramentas HTML, CSS, React.js, Node.js e React Native.
 
+<img src="https://github.com/rafaeleduardoteixeira/ecoleta/blob/master/prev/responsive-website-designs.png"/>
+
+
 <h3 align="center">
  Landing page
 </h3>
