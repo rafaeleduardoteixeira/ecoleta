@@ -7,6 +7,7 @@ import { LeafletMouseEvent } from "leaflet";
 import axios from "axios";
 import "./styles.css";
 import api from "../../services/api";
+import DropZone from '../../components/DropZone'
 
 interface Item {
   id: number;
@@ -28,10 +29,11 @@ const CreatePoint = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState<string>();
   const [selectedCity, setSelectedCity] = useState<string>();
-  const [selectedItens, setSelectedItens] = useState<number[]>([0]);
+  const [selectedItens, setSelectedItens] = useState<number[]>([]);
   const [inicialPosition, setInicialPosition] = useState<[number, number]>([0, 0]);
   const [selectedMapPosition, setSelectedMapPosition] = useState<[number, number]>([0, 0]);
   const [disabledCity, setDisabledCity] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<File>();
 
   const history = useHistory();
 
@@ -104,25 +106,32 @@ const CreatePoint = () => {
 
   async function handleSubmit(event: FormEvent){
     event.preventDefault();
+
     const {name, email, whatsapp} = formData;
     const state = selectedState;
     const city = selectedCity;
     const [latitude, longitude] = selectedMapPosition;
     const itens = selectedItens;
 
-    const data ={
-        name,
-        email,
-        whatsapp,
-        state,
-        city,
-        latitude,
-        longitude,
-        itens
+    const data = new FormData();
+
+    data.append('name', name);
+    data.append('email', email);
+    data.append('whatsapp', whatsapp);
+    data.append('state', String(state));
+    data.append('city', String(city));
+    data.append('latitude', String(latitude));
+    data.append('longitude', String(longitude));
+    data.append('itens', itens.join(','));
+
+    if (selectedImage){
+      data.append('image', selectedImage);
     }
+
     try{
         await api.post("points", data);
-        history.push('/');
+        //fazer tela de sucesso
+        //history.push('/');
     }catch(e){
         console.log("Erro ao salvar ponto.")
     }
@@ -141,6 +150,9 @@ const CreatePoint = () => {
         <h1>
           Cadastro do <br /> ponto de coleta
         </h1>
+
+        <DropZone onFileUploaded={setSelectedImage}/>
+
         <fieldset>
           <legend>
             <h2>Dados</h2>
