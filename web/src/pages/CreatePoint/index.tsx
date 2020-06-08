@@ -1,13 +1,14 @@
-import React, { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import React, { useEffect, useState, ChangeEvent, FormEvent, Fragment } from "react";
 import logo from "../../assets/logo.svg";
 import { Link, useHistory } from "react-router-dom";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiCheck } from "react-icons/fi";
 import { Map, TileLayer, Marker } from "react-leaflet";
 import { LeafletMouseEvent } from "leaflet";
 import axios from "axios";
 import "./styles.css";
 import api from "../../services/api";
-import DropZone from '../../components/DropZone'
+import DropZone from "../../components/DropZone";
+
 
 interface Item {
   id: number;
@@ -34,6 +35,7 @@ const CreatePoint = () => {
   const [selectedMapPosition, setSelectedMapPosition] = useState<[number, number]>([0, 0]);
   const [disabledCity, setDisabledCity] = useState(true);
   const [selectedImage, setSelectedImage] = useState<File>();
+  const [openModal, setOpenModal] = useState<Boolean>(false);
 
   const history = useHistory();
 
@@ -104,10 +106,10 @@ const CreatePoint = () => {
     }
   }
 
-  async function handleSubmit(event: FormEvent){
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const {name, email, whatsapp} = formData;
+    const { name, email, whatsapp } = formData;
     const state = selectedState;
     const city = selectedCity;
     const [latitude, longitude] = selectedMapPosition;
@@ -115,119 +117,130 @@ const CreatePoint = () => {
 
     const data = new FormData();
 
-    data.append('name', name);
-    data.append('email', email);
-    data.append('whatsapp', whatsapp);
-    data.append('state', String(state));
-    data.append('city', String(city));
-    data.append('latitude', String(latitude));
-    data.append('longitude', String(longitude));
-    data.append('itens', itens.join(','));
+    data.append("name", name);
+    data.append("email", email);
+    data.append("whatsapp", whatsapp);
+    data.append("state", String(state));
+    data.append("city", String(city));
+    data.append("latitude", String(latitude));
+    data.append("longitude", String(longitude));
+    data.append("itens", itens.join(","));
 
-    if (selectedImage){
-      data.append('image', selectedImage);
+    if (selectedImage) {
+      data.append("image", selectedImage);
     }
 
-    try{
-        await api.post("points", data);
-        //fazer tela de sucesso
-        //history.push('/');
-    }catch(e){
-        console.log("Erro ao salvar ponto.")
+    try {
+      await api.post("points", data);
+      setOpenModal(true);
+      setTimeout(function () {
+        history.push("/");
+      }, 3000);
+    } catch (e) {
+      console.log("Erro ao salvar ponto.");
     }
   }
 
   return (
-    <div id="page-create-point">
-      <header>
-        <img src={logo} alt="Ecoleta" />
-        <Link to="/">
-          <FiArrowLeft />
-          Voltar para home
-        </Link>
-      </header>
-      <form onSubmit={handleSubmit}>
-        <h1>
-          Cadastro do <br /> ponto de coleta
-        </h1>
+    <Fragment>
+      <div id="page-create-point">
+        <header>
+          <img src={logo} alt="Ecoleta" />
+          <Link to="/">
+            <FiArrowLeft />
+            Voltar para home
+          </Link>
+        </header>
+        <form onSubmit={handleSubmit}>
+          <h1>
+            Cadastro do <br /> ponto de coleta
+          </h1>
 
-        <DropZone onFileUploaded={setSelectedImage}/>
+          <DropZone onFileUploaded={setSelectedImage} />
 
-        <fieldset>
-          <legend>
-            <h2>Dados</h2>
-          </legend>
-          <div className="field">
-            <label htmlFor="name">Nome da entidade</label>
-            <input type="text" name="name" id="name" onChange={handleInputChange} />
-          </div>
-          <div className="field-group">
+          <fieldset>
+            <legend>
+              <h2>Dados</h2>
+            </legend>
             <div className="field">
-              <label htmlFor="email">E-mail</label>
-              <input type="email" name="email" id="email" onChange={handleInputChange} />
+              <label htmlFor="name">Nome da entidade</label>
+              <input type="text" name="name" id="name" onChange={handleInputChange} />
             </div>
-            <div className="field">
-              <label htmlFor="whatsapp">WhatsApp</label>
-              <input type="text" name="whatsapp" id="whatsapp" onChange={handleInputChange} />
+            <div className="field-group">
+              <div className="field">
+                <label htmlFor="email">E-mail</label>
+                <input type="email" name="email" id="email" onChange={handleInputChange} />
+              </div>
+              <div className="field">
+                <label htmlFor="whatsapp">WhatsApp</label>
+                <input type="text" name="whatsapp" id="whatsapp" onChange={handleInputChange} />
+              </div>
             </div>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>
-            <h2>Endereço</h2>
-            <span>Selecione um endereço no mapa</span>
-          </legend>
+          </fieldset>
+          <fieldset>
+            <legend>
+              <h2>Endereço</h2>
+              <span>Selecione um endereço no mapa</span>
+            </legend>
 
-          <Map center={inicialPosition} zoom={14} onClick={handleMapClick}>
-            <TileLayer
-              attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={selectedMapPosition} />
-          </Map>
+            <Map center={inicialPosition} zoom={14} onClick={handleMapClick}>
+              <TileLayer
+                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={selectedMapPosition} />
+            </Map>
 
-          <div className="field-group">
-            <div className="field">
-              <label htmlFor="state">Estado</label>
-              <select name="state" id="state" value={selectedState} onChange={handleStateSelected}>
-                <option value="0">Selecione uma UF</option>
-                {states.map((uf) => (
-                  <option key={uf} value={uf}>
-                    {uf}
-                  </option>
-                ))}
-              </select>
+            <div className="field-group">
+              <div className="field">
+                <label htmlFor="state">Estado</label>
+                <select name="state" id="state" value={selectedState} onChange={handleStateSelected}>
+                  <option value="0">Selecione uma UF</option>
+                  {states.map((uf) => (
+                    <option key={uf} value={uf}>
+                      {uf}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="field">
+                <label htmlFor="state">Cidade</label>
+                <select name="city" id="city" value={selectedCity} onChange={handleCitySelected} disabled={disabledCity}>
+                  <option value="0">Selecione uma cidade</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="field">
-              <label htmlFor="state">Cidade</label>
-              <select name="city" id="city" value={selectedCity} onChange={handleCitySelected} disabled={disabledCity}>
-                <option value="0">Selecione uma cidade</option>
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>
-            <h2>Ítens de Coleta</h2>
-            <span>Selecione um ou mais ítens abaixo</span>
-          </legend>
-          <ul className="itens-grid">
-            {itens.map((item) => (
-              <li key={item.id} onClick={() => handleSelectItem(item.id)} className={selectedItens.includes(item.id) ? "selected" : ""}>
-                <img src={item.image_url} alt={item.title} />
-                <span>{item.title}</span>
-              </li>
-            ))}
-          </ul>
-        </fieldset>
-        <button type="submit">Cadastrar ponto de coleta</button>
-      </form>
-    </div>
+          </fieldset>
+          <fieldset>
+            <legend>
+              <h2>Ítens de Coleta</h2>
+              <span>Selecione um ou mais ítens abaixo</span>
+            </legend>
+            <ul className="itens-grid">
+              {itens.map((item) => (
+                <li key={item.id} onClick={() => handleSelectItem(item.id)} className={selectedItens.includes(item.id) ? "selected" : ""}>
+                  <img src={item.image_url} alt={item.title} />
+                  <span>{item.title}</span>
+                </li>
+              ))}
+            </ul>
+          </fieldset>
+          <button type="submit">Cadastrar ponto de coleta</button>
+        </form>
+      </div>
+
+      <div id="modal" className={openModal ? "" : "hide"}>
+        <div className="content">
+          <FiCheck size={50} color="#34cb79"/>
+          <h1>Ponto de coleta cadastrado com sucesso!</h1>
+        </div>
+      </div>
+    </Fragment>
   );
 };
 

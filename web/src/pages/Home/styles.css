@@ -9,10 +9,29 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 30px;
-
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+}
+
+#page-home header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 48px;
+}
+
+#page-home header a {
+  display: flex;
+  color: var(--title-color);
+  font-weight: 700;
+}
+
+#page-home header a span {
+  display: flex;
+  color: #2fb86e;
+  width: 20px;
+  height: 20px;
+  margin-right: 15px;
 }
 
 #page-home .content header {
@@ -56,21 +75,14 @@
 }
 
 #page-home .content main a span {
-  display: block;
   background: rgba(0, 0, 0, 0.08);
-  width: 72px;
+  width: 80px;
   height: 72px;
-
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-}
-
-#page-home .content main a span svg {
-  color: #fff;
-  width: 20px;
-  height: 20px;
 }
 
 #page-home .content main a strong {
@@ -81,6 +93,98 @@
 
 #page-home .content main a:hover {
   background: #2fb86e;
+}
+
+#modal {
+  background-color: #0e0a14ef;
+  height: 100vh;
+  width: 100vw;
+
+  position: fixed;
+  top: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: 400ms;
+}
+
+#modal.hide{
+    display: none;
+}
+
+#modal .content {
+  color: white;
+
+  width: 420px !important;
+}
+
+#modal .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 48px;
+  width: 100%;
+}
+
+#modal .header a{
+    width: 20px;
+    height: 20px;
+    display: flex;
+    font-size: 0.01px;
+}
+
+#modal .header h1{
+    color: white;
+    font-size: 36px;
+    line-height: 42px;
+}
+
+#modal form label{
+    font-size: 14px;
+    line-height: 16px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+#modal form .field{
+    display: flex;
+}
+
+#modal form .input{
+    width: 350px;
+    background-color: #f0f0f5;
+    outline: none;
+    border-radius: 8px 0px 0px 8px;
+    border: none;
+    padding: 16px 24px;
+    font-size: 16px;
+    color: #6c6c80;
+}
+
+#modal form button{
+    width: 72px;
+    height: 72px;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: 0px 8px 8px 0px;
+}
+
+#modal form button:hover{
+    background-color:#2fb86e;
+}
+
+#modal .closeWhite{
+  background-color: transparent;
+  border: none;
+  color: white;
+  cursor: pointer  
+}
+
+#modal .searchWhite{
+  color: white;
+  cursor: pointer  
 }
 
 @media (max-width: 1400px) {
